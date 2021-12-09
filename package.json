@@ -4,7 +4,7 @@
   "description": "",
   "main": "apiTeamFinder.js",
   "scripts": {
-    "start":"node apiTeamFinder.js",
+    "start": "node apiTeamFinder.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
