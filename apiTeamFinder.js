@@ -5,13 +5,10 @@ let port = process.env.PORT || 3140;
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
-<<<<<<< HEAD
 app.use(cors())
-=======
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
->>>>>>> dcb3591a4ecbd4266b378440b2d53148c4f1a870
 
 let mysql = require("mysql2");
 const { info } = require("console");
@@ -86,27 +83,6 @@ app.post('/login', (req, res) => {
                 msg: "El usuario o la contraseña no son correctos",
                 resultado: results
             }
-<<<<<<< HEAD
-        });
-      });
-
-app.post('/reg', (request, res) => {
-        const user              = request.body.nickname;
-        const password          = request.body.password;
-        const params            = [user,password]
-        const query             = `SELECT id_user FROM usuario WHERE nickname = ? and password = ?`;
-        let response;
-        connection.query(query,params,(err, results) =>{
-            if(err){
-                console.error(err);
-                response = {
-                    error:true,
-                    msg:"Error al conectar con la base de datos",
-                    resultado:err
-                };
-                res.status(500).send(response);
-                return;
-=======
             res.status(404).send(response);
         }
     });
@@ -136,7 +112,6 @@ app.post('/reg', (request, res) => {
                 resultado: results,
 
 
->>>>>>> dcb3591a4ecbd4266b378440b2d53148c4f1a870
             }
             res.status(200).send(response);
         } else {
@@ -163,16 +138,11 @@ app.post('/reg', (request, res) => {
                 msg: "El usuario o la contraseña no son correctos",
                 resultado: results
             }
-<<<<<<< HEAD
-        });
-});
-=======
             res.status(404).send(response);
         }
     });
 });
 
->>>>>>> dcb3591a4ecbd4266b378440b2d53148c4f1a870
 
 
 
