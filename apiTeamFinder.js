@@ -1,12 +1,11 @@
 const express = require ("express");
 const app = express();
+const cors = require("cors")
 let port = process.env.PORT || 3140;
 
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
-
-app.use(express.urlencoded({extended: false}))
-app.use(express.json())
+app.use(cors())
 
 let mysql = require ("mysql2");
 const { info } = require("console");
@@ -85,7 +84,8 @@ app.post('/login', (req, res) => {
             }
         });
       });
-      app.post('/reg', (request, res) => {
+
+app.post('/reg', (request, res) => {
         const user              = request.body.nickname;
         const password          = request.body.password;
         const params            = [user,password]
@@ -139,7 +139,7 @@ app.post('/login', (req, res) => {
                 res.status(404).send(response);
             }
         });
-      });
+});
 
     
 
