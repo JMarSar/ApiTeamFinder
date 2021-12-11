@@ -86,6 +86,7 @@ app.post('/login', (req, res) => {
             }
             res.status(200).send(response);
         }
+        console.log(response)
     });
 });
 app.post('/reg', (request, res) => {
