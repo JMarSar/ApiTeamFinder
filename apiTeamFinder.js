@@ -84,7 +84,7 @@ app.post('/login', (req, res) => {
                 msg: "El usuario o la contraseña no son correctos",
                 resultado: results
             }
-            res.status(300).send(response);
+            res.status(200).send(response);
         }
     });
 });
