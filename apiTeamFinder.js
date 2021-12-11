@@ -54,7 +54,8 @@ app.post('/login', (req, res) => {
     const user = req.body.nombre;
     const password = req.body.password;
     const params = [user, password]
-    const query = `SELECT id_user FROM usuario WHERE nickname = ? and password = ?`;
+    const query = `SELECT id_user,nickname,password,G_manager,lfm,idioma,imagen,id_juego_fav
+     FROM usuario WHERE nickname = ? and password = ?`;
     let response;
     connection.query(query, params, (err, results) => {
         if (err) {
@@ -83,7 +84,7 @@ app.post('/login', (req, res) => {
                 msg: "El usuario o la contraseña no son correctos",
                 resultado: results
             }
-            res.status(200).send(response);
+            res.status(300).send(response);
         }
     });
 });
