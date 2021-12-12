@@ -467,7 +467,6 @@ app.delete("/equipo", function (request, response) {
 })
 
 //*****************RANKING**************
-// **********************USUARIO*****************
 
 
 app.get("/ranking", function (request, response) {
