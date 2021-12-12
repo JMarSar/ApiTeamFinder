@@ -186,10 +186,10 @@ app.get("/usuario", function (request, response) {
 app.post("/usuario", function (request, response) {
 
     let respuesta;
-    let sql = `INSERT INTO usuario(email, nickname, password, G_manager, lfm, fecha_nacimiento, info_ad,imagen,discord, twitter, n_jugador) 
+    let sql = `INSERT INTO usuario(email, nickname, password, G_manager, lfm, fecha_nacimiento, info_ad,imagen,discord, twitter) 
                    VALUES(\"${request.body.email}\", \"${request.body.nickname}\", \"${request.body.password}\",
                    \"${request.body.G_manager}\",\"${request.body.lfm}\",\"${request.body.fecha_nacimiento}\", \"${request.body.info_ad}\",
-                   \"${request.body.imagen}\",\"${request.body.discord}\", \"${request.body.twitter}\",\"${request.body.n_jugador}\")`
+                   \"${request.body.imagen}\",\"${request.body.discord}\", \"${request.body.twitter}\")`
 
     connection.query(sql, function (err, res) {
         if (err) {
