@@ -356,7 +356,6 @@ app.post("/torneo", function (request, response) {
             response.send(respuesta)
         }
     })
-
 })
 
 
