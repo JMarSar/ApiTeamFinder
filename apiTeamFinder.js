@@ -465,4 +465,31 @@ app.delete("/equipo", function (request, response) {
         })
     }
 })
+
+//*****************RANKING**************
+// **********************USUARIO*****************
+
+
+app.get("/ranking", function (request, response) {
+
+
+        let sql = `SELECT id_user,nickname, posicion, rk_servidor,kda,wr FROM TeamFinder.usuario AS usuario 
+                   INNER JOIN TeamFinder.data_userJg AS data_userJg on (usuario.id_user = data_userJg.user_id)`
+        let respuesta;
+
+        connection.query(sql, function (err, res) {
+
+            if (err) {
+
+                console.log(err)
+                respuesta = { error: true, codigo: 200, resultado: res }
+            }
+            else {
+                respuesta = { error: false, codigo: 200, resultado: res }
+
+            }
+            response.send(respuesta)
+        })
+})
+
     app.listen(port)
