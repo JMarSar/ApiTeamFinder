@@ -33,22 +33,7 @@ connection.connect(function (error) {
     }
 })
 
-app.get("/usuarios", function (request, response) {
-    let sql = `SELECT * FROM Usuarios`
-    connection.query(sql, function (err, res) {
-
-        if (err) {
-            console.log(err)
-        }
-        else {
-            let respuesta = { error: false, codigo: 200, resultado: res }
-            response.send(respuesta)
-        }
-    }
-    )
-})
-
-
+// ******************* LOGIN **********************
 
 app.post('/login', (req, res) => {
     const user = req.body.nombre;
@@ -89,7 +74,12 @@ app.post('/login', (req, res) => {
         console.log(response)
     });
 });
-app.post('/reg', (request, res) => {
+
+
+
+// ********* REGISTRO ***********
+
+app.post('/registro', (request, res) => {
     const user = request.body.nickname;
     const password = request.body.password;
     const params = [user, password]
@@ -144,10 +134,6 @@ app.post('/reg', (request, res) => {
         }
     });
 });
-
-
-
-
 
 
 
@@ -359,7 +345,104 @@ app.post("/torneo", function (request, response) {
 })
 
 
-app.delete("/torneo", function (request, response) {
+// ******************** EQUIPO ******************************
+
+
+
+app.get("/equipo", function (request, response) {
+
+    let id = request.query.id
+
+    if (id == null) {
+
+        let sql = `SELECT * FROM equipo`
+        let respuesta;
+
+        connection.query(sql, function (err, res) {
+
+            if (err) {
+
+                console.log(err)
+                respuesta = { error: true, codigo: 200, resultado: res }
+            }
+            else {
+                respuesta = { error: false, codigo: 200, resultado: res }
+
+            }
+            response.send(respuesta)
+        })
+    }
+    else {
+
+        let sql = `SELECT equipo_id, nombre_equipo, creador, juego_id FROM equipo WHERE equipo_id = ${id}`
+
+        connection.query(sql, function (err, res) {
+
+            if (err) {
+                console.log(err)
+            }
+            else {
+                console.log(res)
+                let respuesta = { error: false, codigo: 200, resultado: res }
+                response.send(respuesta)
+            }
+        })
+    }
+
+})
+
+app.post("/equipo", function (request, response) {
+
+    let respuesta;
+    let sql = `INSERT INTO equipo(nombre_equipo, creador, juego_id) 
+                   VALUES(\"${request.body.nombre_equipo}\", \"${request.body.creador}\", \"${request.body.juego_id}\")`
+
+    connection.query(sql, function (err, res) {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            console.log("equipo")
+            console.log(res)
+            respuesta = { error: false, codigo: 200, mensaje: "equipo creado", resultado: res }
+            response.send(respuesta)
+        }
+    })
+})
+
+app.put("/equipo", function (request, response) {
+
+    let respuesta;
+    let id = request.body.equipo_id
+    let nombre = request.body.nombre_equipo
+    let creador = request.body.creador
+    let juego_id = request.body.juego_id
+   
+
+    let params = [nombre, creador, juego_id, id]
+
+    let sql =
+        `UPDATE equipo SET nombre_equipo = \"${request.body.nombre_equipo}\", creador = \"${request.body.creador}\",
+         juego_id = \"${request.body.juego_id}\", equipo_id = \"${request.body.equipo_id}\" WHERE equipo_id = ${id}`
+
+    connection.query(sql, params, function (err, res) {
+        if (err) {
+            console.log(err)
+            respuesta = { error: true, codigo: 200, mensaje: "error", resultado: res }
+
+        }
+        else {
+            console.log("usuario cambiado")
+            console.log(res)
+            respuesta = { error: false, codigo: 200, mensaje: "equipo cambiado", resultado: res }
+
+        }
+        response.send(respuesta)
+    })
+})
+
+
+app.delete("/equipo", function (request, response) {
 
     let id = request.query.id
     console.log(id)
