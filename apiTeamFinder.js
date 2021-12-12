@@ -491,4 +491,33 @@ app.get("/ranking", function (request, response) {
         })
 })
 
+//*******************LFM************************
+app.put("/lfm", function (request, response) {
+
+    let respuesta;
+    let id = request.body.id
+    let lfm = request.body.lfm
+   
+
+    let params = [id, lfm]
+
+    let sql =
+    `UPDATE usuario SET lfm = \"${request.body.lfm}\" WHERE id_user = ${id}`
+
+    connection.query(sql, params, function (err, res) {
+        if (err) {
+            console.log(err)
+            respuesta = { error: true, codigo: 200, mensaje: "error", resultado: res }
+
+        }
+        else {
+            console.log("lfm cambiado")
+            console.log(res)
+            respuesta = { error: false, codigo: 200, mensaje: "lfm cambiado", resultado: res }
+
+        }
+        response.send(respuesta)
+    })
+})
+
     app.listen(port)
