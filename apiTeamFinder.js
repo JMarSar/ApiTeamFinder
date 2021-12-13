@@ -186,7 +186,7 @@ app.get("/usuario", function (request, response) {
 
 app.post("/usuario", function (request, response) {
 
-    let respuesta;
+
     let sql = `INSERT INTO usuario(email, nickname, password, G_manager, lfm, fecha_nacimiento, info_ad,imagen,discord, twitter) 
                    VALUES(\"${request.body.email}\", \"${request.body.nickname}\", \"${request.body.password}\",
                    \"${request.body.G_manager}\",\"${request.body.lfm}\",\"${request.body.fecha_nacimiento}\", \"${request.body.info_ad}\",
@@ -376,7 +376,7 @@ app.get("/equipo", function (request, response) {
     }
     else {
 
-        let sql = `SELECT equipo_id, nombre_equipo, creador, juego_id FROM equipo WHERE equipo_id = ${id}`
+        let sql = `SELECT * FROM equipo WHERE equipo_id = ${id}`
 
         connection.query(sql, function (err, res) {
 
@@ -419,7 +419,8 @@ app.put("/equipo", function (request, response) {
     let nombre = request.body.nombre_equipo
     let creador = request.body.creador
     let juego_id = request.body.juego_id
-   
+
+
 
     let params = [nombre, creador, juego_id, id]
 
@@ -519,6 +520,27 @@ app.put("/lfm", function (request, response) {
 
         }
         response.send(respuesta)
+    })
+})
+
+//*******************UNIRSE************************
+
+app.post("/unirse", function (request, response) {
+
+    let respuesta;
+    let sql = `INSERT INTO alertas(equipo_id, estado, id_user, mensaje) 
+                   VALUES(\"${request.body.equipo_id}\", \"${request.body.estado}\", \"${request.body.id_user}\", \"${request.body.mensaje}\")`
+
+    connection.query(sql, function (err, res) {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            console.log("equipo")
+            console.log(res)
+            respuesta = { error: false, codigo: 200, mensaje: "alerta enviada", resultado: res }
+            response.send(respuesta)
+        }
     })
 })
 
