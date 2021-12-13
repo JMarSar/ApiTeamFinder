@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors")
 let port = process.env.PORT || 3140;
 
 app.use(express.urlencoded({ extended: false }))
@@ -7,6 +8,7 @@ app.use(express.json())
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
+app.use(cors())
 
 let mysql = require("mysql2");
 const { info } = require("console");
@@ -303,7 +305,7 @@ app.get("/torneo", function (request, response) {
     }
     else {
 
-        let sql = `SELECT torneo_id, patrocinado, reglas, tier, juego, clave_torneo, nombre_torneo,
+        let sql = `SELECT torneo_id, patrocinado, reglas, tier, juego_id, clave_torneo, nombre_torneo,
                 fecha_inicio, fecha_fin FROM torneo WHERE torneo_id = ${id}`
 
         connection.query(sql, function (err, res) {
@@ -322,12 +324,13 @@ app.get("/torneo", function (request, response) {
 })
 
 app.post("/torneo", function (request, response) {
+    console.log(request.body)
 
     let respuesta;
-    let sql = `INSERT INTO torneo(patrocinado, reglas, tier, juego, clave_torneo, nombre_torneo, fecha_inicio, fecha_fin) 
+    let sql = `INSERT INTO torneo(patrocinado, reglas, tier, juego_id, clave_torneo, nombre_torneo, fecha_inicio, fecha_fin, numero_equipos) 
                        VALUES(\"${request.body.patrocinado}\", \"${request.body.reglas}\", \"${request.body.tier}\",
-                       \"${request.body.juego}\", \"${request.body.clave_torneo}\",\"${request.body.nombre_torneo}\",
-                       \"${request.body.fecha_inicio}\", \"${request.body.fecha_fin}\")`
+                       \"${1}\", \"${request.body.clave_torneo}\",\"${request.body.nombre_torneo}\",
+                       \"${request.body.fecha_inicio}\", \"${request.body.fecha_fin}\",\"${request.body.n_equipos}\")`
 
     connection.query(sql, function (err, res) {
         if (err) {
