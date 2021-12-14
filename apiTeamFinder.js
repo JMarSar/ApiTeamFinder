@@ -307,7 +307,7 @@ app.get("/torneo", function (request, response) {
     else {
 
         let sql = `SELECT torneo_id, patrocinado, reglas, tier, juego_id, clave_torneo, nombre_torneo,
-                fecha_inicio, fecha_fin FROM torneo WHERE torneo_id = ${id}`
+                fecha_inicio, fecha_fin, numero_equipos FROM torneo WHERE torneo_id = ${id}`
 
         connection.query(sql, function (err, res) {
 
