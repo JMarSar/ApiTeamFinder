@@ -40,8 +40,8 @@ app.post('/login', (req, res) => {
     const user = req.body.nombre;
     const password = req.body.password;
     const params = [user, password]
-    const query = `SELECT id_user,nickname,password,G_manager,lfm,idioma,imagen,id_juego_fav
-     FROM usuario WHERE nickname = ? and password = ?`;
+    const query = `SELECT id_user,nickname,password,G_manager,lfm,idioma,imagen,id_juego_fav,nombre_equipo, equipo_id
+    FROM usuario INNER JOIN equipo ON (usuario.id_user = equipo.creador) WHERE nickname = ? and password = ?`;
     let response;
     connection.query(query, params, (err, results) => {
         if (err) {
@@ -350,10 +350,32 @@ app.post("/torneo", function (request, response) {
 // ******************** EQUIPO ******************************
 
 
+app.post("/equipos", function(request,response){
+    console.log(request.body)
+    let nombre = request.body.nombre
+    let params = [nombre]
+    let sql = `SELECT * FROM equipo WHERE nombre_equipo = ?`
+
+        connection.query(sql,params, function (err, res) {
+
+            if (err) {
+                console.log(err)
+                let respuesta = { error: false, codigo: 200, resultado: err ,mensaje: "no existe ese equipo"}
+                response.send(respuesta)
+            }
+            else {
+                console.log(res)
+                let respuesta = { error: false, codigo: 200, resultado: res }
+                response.send(respuesta)
+            }
+        })
+    }
+)
 
 app.get("/equipo", function (request, response) {
 
     let id = request.query.id
+
 
     if (id == null) {
 
@@ -495,6 +517,8 @@ app.get("/ranking", function (request, response) {
 })
 
 //*******************LFM************************
+
+
 app.put("/lfm", function (request, response) {
 
     let respuesta;
@@ -522,10 +546,62 @@ app.put("/lfm", function (request, response) {
         response.send(respuesta)
     })
 })
+//*******************LFR************************
+
+app.get("/lfr", function (request, response) {
+
+    console.log("llega lfr api")
+
+    let sql = `SELECT nombre_equipo, nickname,id_user FROM equipo INNER JOIN usuario ON (equipo.creador = usuario.id_user) WHERE Lfr = 1 ORDER BY RAND() LIMIT 1  `
+    let respuesta;
+
+    connection.query(sql, function (err, res) {
+
+        if (err) {
+
+            console.log(err)
+            respuesta = { error: true, codigo: 200, resultado: res }
+        }
+        else {
+            respuesta = { error: false, codigo: 200, resultado: res }
+
+        }
+        response.send(respuesta)
+    })
+})
+
+
+app.put("/lfr", function (request, response) {
+
+    let respuesta;
+    let id = request.body.id
+    let lfr = request.body.lfr
+   
+
+    let sql =
+    `UPDATE equipo SET Lfr = \"${request.body.lfr}\" WHERE id_equipo = ${id}`
+
+    connection.query(sql, params, function (err, res) {
+        if (err) {
+            console.log(err)
+            respuesta = { error: true, codigo: 200, mensaje: "error", resultado: res }
+
+        }
+        else {
+            console.log("lfr cambiado")
+            console.log(res)
+            respuesta = { error: false, codigo: 200, mensaje: "lfr cambiado", resultado: res }
+
+        }
+        response.send(respuesta)
+    })
+})
+
 
 //*******************UNIRSE************************
 
 app.post("/unirse", function (request, response) {
+    console.log("recibido2")
 
     let respuesta;
     let sql = `INSERT INTO alertas(equipo_id, estado, id_user, mensaje) 
@@ -543,5 +619,6 @@ app.post("/unirse", function (request, response) {
         }
     })
 })
+
 
     app.listen(port)
