@@ -7,10 +7,6 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(cors())
 
-app.use(express.urlencoded({ extended: false }))
-app.use(express.json())
-app.use(cors())
-
 let mysql = require("mysql2");
 const { info } = require("console");
 let connection = mysql.createConnection(
@@ -432,11 +428,13 @@ app.get("/equipo", function (request, response) {
 
 })
 
-app.post("/equipo", function (request, response) {
+app.post("/crearEquipo", function (request, response) {
+
+    console.log(request.body)
 
     let respuesta;
-    let sql = `INSERT INTO equipo(nombre_equipo, acronimo_equipo, creador, juego_id) 
-                   VALUES(\"${request.body.nombre_equipo}\", \"${request.body.acronimo_equipo}\",\"${request.body.creador}\", \"${request.body.juego_id}\")`
+    let sql = `INSERT INTO equipo(url_imagen, nombre_equipo, acronimo_equipo, creador, juego_id) 
+                   VALUES(\"${request.body.url_imagen}\", \"${request.body.nombre_equipo}\", \"${request.body.acronimo_equipo}\",\"${request.body.creador_equipo}\", \"${request.body.juego_id}\")`
 
     connection.query(sql, function (err, res) {
         if (err) {
@@ -570,7 +568,7 @@ app.get("/lfr", function (request, response) {
 
     console.log("llega lfr api")
 
-    let sql = `SELECT nombre_equipo, nickname,id_user FROM equipo INNER JOIN usuario ON (equipo.creador = usuario.id_user) WHERE Lfr = 1 ORDER BY RAND() LIMIT 1  `
+    let sql = `SELECT equipo_id,nombre_equipo, nickname,id_user FROM equipo INNER JOIN usuario ON (equipo.creador = usuario.id_user) WHERE Lfr = 1 ORDER BY RAND() LIMIT 1  `
     let respuesta;
 
     connection.query(sql, function (err, res) {
