@@ -570,7 +570,7 @@ app.get("/lfr", function (request, response) {
 
     console.log("llega lfr api")
 
-    let sql = `SELECT nombre_equipo, nickname,id_user FROM equipo INNER JOIN usuario ON (equipo.creador = usuario.id_user) WHERE Lfr = 1 ORDER BY RAND() LIMIT 1  `
+    let sql = `SELECT equipo_id,nombre_equipo, nickname,id_user FROM equipo INNER JOIN usuario ON (equipo.creador = usuario.id_user) WHERE Lfr = 1 ORDER BY RAND() LIMIT 1  `
     let respuesta;
 
     connection.query(sql, function (err, res) {
@@ -597,9 +597,9 @@ app.put("/lfr", function (request, response) {
    
 
     let sql =
-    `UPDATE equipo SET Lfr = \"${request.body.lfr}\" WHERE id_equipo = ${id}`
+    `UPDATE equipo SET Lfr = \"${request.body.lfr}\" WHERE equipo_id = ${id}`
 
-    connection.query(sql, params, function (err, res) {
+    connection.query(sql, function (err, res) {
         if (err) {
             console.log(err)
             respuesta = { error: true, codigo: 200, mensaje: "error", resultado: res }
