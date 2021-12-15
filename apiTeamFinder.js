@@ -179,8 +179,7 @@ app.get("/usuario", function (request, response) {
     }
     else {
 
-        let sql = `SELECT id_user, email, nickname, password, G_manager, lfm,
-             fecha_nacimiento, info_ad, imagen, discord, twitter, n_jugador FROM usuario WHERE id_user = ${id}`
+        let sql = `SELECT * FROM usuario WHERE id_user = ${id}`
 
         connection.query(sql, function (err, res) {
 
@@ -513,7 +512,7 @@ app.delete("/equipo", function (request, response) {
 app.get("/ranking", function (request, response) {
 
 
-        let sql = `SELECT id_user,nickname, posicion, rk_servidor,kda,wr FROM TeamFinder.usuario AS usuario 
+        let sql = `SELECT * FROM TeamFinder.usuario AS usuario 
                    INNER JOIN TeamFinder.data_userJg AS data_userJg on (usuario.id_user = data_userJg.user_id)`
         let respuesta;
 
