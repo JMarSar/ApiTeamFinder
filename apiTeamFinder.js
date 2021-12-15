@@ -415,7 +415,7 @@ app.get("/equipo", function (request, response) {
 
 })
 
-app.post("/crearEquipo", function (request, response) {
+app.post("/equipo", function (request, response) {
 
     let respuesta;
     let sql = `INSERT INTO equipo(nombre_equipo, acronimo_equipo, creador, juego_id) 
