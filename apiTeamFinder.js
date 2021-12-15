@@ -597,9 +597,9 @@ app.put("/lfr", function (request, response) {
    
 
     let sql =
-    `UPDATE equipo SET Lfr = \"${request.body.lfr}\" WHERE id_equipo = ${id}`
+    `UPDATE equipo SET Lfr = \"${request.body.lfr}\" WHERE equipo_id = ${id}`
 
-    connection.query(sql, params, function (err, res) {
+    connection.query(sql, function (err, res) {
         if (err) {
             console.log(err)
             respuesta = { error: true, codigo: 200, mensaje: "error", resultado: res }
