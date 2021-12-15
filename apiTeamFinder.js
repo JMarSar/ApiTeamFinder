@@ -40,7 +40,7 @@ app.post('/login', (req, res) => {
     const user = req.body.nombre;
     const password = req.body.password;
     const params = [user, password]
-    const query = `SELECT id_user,nickname,password,G_manager,lfm,idioma,imagen,id_juego_fav,nombre_equipo, equipo_id
+    const query = `SELECT id_user,nickname,password,G_manager,lfm,idioma,imagen,id_juego_fav,nombre_equipo, equipo_id, creador
     FROM usuario INNER JOIN equipo ON (usuario.id_user = equipo.creador) WHERE nickname = ? and password = ?`;
     let response;
     connection.query(query, params, (err, results) => {
@@ -60,17 +60,34 @@ app.post('/login', (req, res) => {
                 error: false,
                 msg: "Inicio de sesión completado",
                 resultado: results,
-
-
             }
             res.status(200).send(response);
         } else {
-            response = {
-                error: false,
-                msg: "El usuario o la contraseña no son correctos",
-                resultado: results
-            }
-            res.status(200).send(response);
+            const query = `SELECT id_user,nickname,password,G_manager,lfm,idioma,imagen,id_juego_fav
+            FROM usuario WHERE nickname = ? and password = ?`;
+            let response;
+            connection.query(query, params, (err, results) => {
+                console.log("flag1")
+                if (err) {
+                    console.error(err);
+                    response = {
+                        error: false,
+                        msg: "Error al conectar con la base de datos",
+                        resultado: results
+                    }
+                    res.status(200).send(response);
+                }
+                else{
+                    console.log("login incorrecto")
+                    response = {
+                        error: false,
+                        msg: "El usuario o la contraseña no son correctos",
+                        resultado: results,
+                    }
+                    res.status(200).send(response);
+                    
+                }
+            })
         }
         console.log(response)
     });
@@ -352,7 +369,7 @@ app.post("/torneo", function (request, response) {
 
 app.post("/equipos", function(request,response){
     console.log(request.body)
-    let nombre = request.body.nombre
+    let nombre = request.body.nombre_equipo
     let params = [nombre]
     let sql = `SELECT * FROM equipo WHERE nombre_equipo = ?`
 
@@ -602,6 +619,7 @@ app.put("/lfr", function (request, response) {
 
 app.post("/unirse", function (request, response) {
     console.log("recibido2")
+    console.log(request.body)
 
     let respuesta;
     let sql = `INSERT INTO alertas(equipo_id, estado, id_user, mensaje) 
@@ -612,11 +630,79 @@ app.post("/unirse", function (request, response) {
             console.log(err)
         }
         else {
-            console.log("equipo")
             console.log(res)
             respuesta = { error: false, codigo: 200, mensaje: "alerta enviada", resultado: res }
             response.send(respuesta)
         }
+    })
+})
+//*******************CONECTAR************************
+
+app.post("/conectar", function (request, response) {
+    console.log("recibido23")
+    console.log(request.body)
+
+    let respuesta;
+    let sql = `INSERT INTO alertas(equipo_id, estado, equipo_id_sender, mensaje) 
+                   VALUES(\"${request.body.equipo_id}\", \"${request.body.estado}\", \"${request.body.sender_id}\", \"${request.body.mensaje}\")`
+
+    connection.query(sql, function (err, res) {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            console.log(res)
+            respuesta = { error: false, codigo: 200, mensaje: "alerta  conecxion enviada", resultado: res }
+            response.send(respuesta)
+        }
+    })
+})
+
+//**********************ALERTAS*************** *
+
+app.post("/alertas", function(request,response){
+    console.log(request.body)
+    let equipo = request.body.equipo
+    let params = [equipo]
+
+    let sql = `SELECT * FROM alertas WHERE equipo_id = ? AND estado = 'espera'`
+
+        connection.query(sql,params, function (err, res) {
+
+            if (err) {
+                console.log(err)
+                let respuesta = { error: false, codigo: 200, resultado: err ,mensaje: "no hay alertas"}
+                response.send(respuesta)
+            }
+            else {
+                console.log(res)
+                let respuesta = { error: false, codigo: 200, resultado: res, mensaje: "alertas encontradas" }
+                response.send(respuesta)
+            }
+        })
+    }
+)
+app.put("/alertas", function (request, response) {
+    console.log(request.body)
+    let respuesta;
+    let id = request.body.id
+
+    let sql =
+    `DELETE FROM alertas WHERE id = ${id}`
+
+    connection.query(sql, function (err, res) {
+        if (err) {
+            console.log(err)
+            respuesta = { error: true, codigo: 200, mensaje: "error", resultado: res }
+
+        }
+        else {
+            console.log("lfr cambiado")
+            console.log(res)
+            respuesta = { error: false, codigo: 200, mensaje: "alerta borradaS", resultado: res }
+
+        }
+        response.send(respuesta)
     })
 })
 
