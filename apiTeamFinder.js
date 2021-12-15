@@ -418,8 +418,8 @@ app.get("/equipo", function (request, response) {
 app.post("/equipo", function (request, response) {
 
     let respuesta;
-    let sql = `INSERT INTO equipo(nombre_equipo, creador, juego_id) 
-                   VALUES(\"${request.body.nombre_equipo}\", \"${request.body.creador}\", \"${request.body.juego_id}\")`
+    let sql = `INSERT INTO equipo(nombre_equipo, acronimo_equipo, creador, juego_id) 
+                   VALUES(\"${request.body.nombre_equipo}\", \"${request.body.acronimo_equipo}\",\"${request.body.creador}\", \"${request.body.juego_id}\")`
 
     connection.query(sql, function (err, res) {
         if (err) {
@@ -441,14 +441,15 @@ app.put("/equipo", function (request, response) {
     let nombre = request.body.nombre_equipo
     let creador = request.body.creador
     let juego_id = request.body.juego_id
+    let acronimo_equipo = request.body.acronimo_equipo
 
 
-
-    let params = [nombre, creador, juego_id, id]
+    let params = [nombre, creador, juego_id, id, acronimo_equipo]
 
     let sql =
         `UPDATE equipo SET nombre_equipo = \"${request.body.nombre_equipo}\", creador = \"${request.body.creador}\",
-         juego_id = \"${request.body.juego_id}\", equipo_id = \"${request.body.equipo_id}\" WHERE equipo_id = ${id}`
+         juego_id = \"${request.body.juego_id}\", equipo_id = \"${request.body.equipo_id}\" WHERE equipo_id = ${id}, 
+         acronimo_equipo = \"${request.body.acronimo_equipo}\" WHERE acronimo_equipo = ${acronimo_equipo}`
 
     connection.query(sql, params, function (err, res) {
         if (err) {
