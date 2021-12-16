@@ -36,7 +36,7 @@ app.post('/login', (req, res) => {
     const user = req.body.nombre;
     const password = req.body.password;
     const params = [user, password]
-    const query = `SELECT id_user,nickname,password,G_manager,lfm,idioma,imagen,id_juego_fav,nombre_equipo, equipo_id, creador
+    const query = `SELECT *
     FROM usuario INNER JOIN equipo ON (usuario.id_user = equipo.creador) WHERE nickname = ? and password = ?`;
     let response;
     connection.query(query, params, (err, results) => {
