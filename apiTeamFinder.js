@@ -391,7 +391,7 @@ app.get("/equipo", function (request, response) {
 
     if (id == null) {
 
-        let sql = `SELECT * FROM equipo INNER JOIN campeones on (equipo.campeon_favorito = campeones.campeon_id) `
+        let sql = `SELECT * FROM equipo INNER JOIN usuario on (equipo.creador = usuario.id_user) INNER JOIN campeones on (equipo.campeon_favorito = campeones.campeon_id) `
         let respuesta;
 
         connection.query(sql, function (err, res) {
