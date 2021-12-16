@@ -410,7 +410,7 @@ app.get("/equipo", function (request, response) {
     }
     else {
 
-        let sql = `SELECT * FROM equipo WHERE equipo_id = ${id}`
+        let sql = `SELECT * FROM equipo INNER JOIN user_equipo on(equipo.equipo_id = user_eqipo.team_id) INNER JOIN campeones on (equipo.campeon_favorito = campeones.campeon_id)  WHERE equipo_id = ${id}`
 
         connection.query(sql, function (err, res) {
 
