@@ -513,7 +513,7 @@ app.get("/ranking", function (request, response) {
 
 
         let sql = `SELECT * FROM TeamFinder.usuario AS usuario 
-                   INNER JOIN TeamFinder.data_userJg AS data_userJg on (usuario.id_user = data_userJg.user_id)`
+                   INNER JOIN TeamFinder.data_userJg AS data_userJg on (usuario.id_user = data_userJg.user_id) INNER JOIN equipo on(usuario.id_user = equipo.creador)`
         let respuesta;
 
         connection.query(sql, function (err, res) {
