@@ -567,7 +567,7 @@ app.get("/lfr", function (request, response) {
 
     console.log("llega lfr api")
 
-    let sql = `SELECT equipo_id,nombre_equipo, nickname,id_user FROM equipo INNER JOIN usuario ON (equipo.creador = usuario.id_user) WHERE Lfr = 1 ORDER BY RAND() LIMIT 1  `
+    let sql = `SELECT * FROM equipo INNER JOIN usuario ON (equipo.creador = usuario.id_user) WHERE Lfr = 1 ORDER BY RAND() LIMIT 1  `
     let respuesta;
 
     connection.query(sql, function (err, res) {
