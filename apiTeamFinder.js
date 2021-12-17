@@ -299,7 +299,7 @@ app.get("/torneo", function (request, response) {
 
     if (id == null) {
 
-        let sql = `SELECT * FROM torneo ORDER BY patrocinado DESK`
+        let sql = `SELECT * FROM torneo ORDER BY patrocinado DESC`
         let respuesta;
 
         connection.query(sql, function (err, res) {
