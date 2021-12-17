@@ -93,61 +93,61 @@ app.post('/login', (req, res) => {
 
 // ********* REGISTRO ***********
 
-app.post('/registro', (request, res) => {
-    const user = request.body.nickname;
-    const password = request.body.password;
-    const params = [user, password]
-    const query = `SELECT id_user FROM usuario WHERE nickname = ? and password = ?`;
-    let response;
-    connection.query(query, params, (err, results) => {
-        if (err) {
-            console.error(err);
-            response = {
-                error: true,
-                msg: "Error al conectar con la base de datos",
-                resultado: err
-            };
-            res.status(500).send(response);
-            return;
-        }
-        if (results.length > 0) {
-            console.log("Usuario ya existente")
-            response = {
-                error: false,
-                msg: "Usuario ya existente",
-                resultado: results,
+app.post('/registro', (request, response) => {
+    console.log(request.body)
+    
+    let email= request.body.email;
+    let nombre= request.body.nombre;
+    let password= request.body.password;
+    let G_manager= request.body.G_manager;
+    let idioma= request.body.idioma;
+    let lfm = request.body.lfm;
+    let fecha_nacimiento= request.body.fecha_nacimiento;
+    let info_ad= request.body.info_ad;
+    let imagen= request.body.imagen;
+    let nick= request.body.nick;
+    let servidor= request.body.servidor;
+    let posicion= request.body.posicion;
+    let id_jugador_riot= request.body.id_jugador_riot;
+    let puuid= request.body.puuid;
+    let id_ecrypt= request.body.id_ecrypt;
+    let id_juego_fav= request.body.id_juego_fav;
+    let id_champion= request.body.id_champion;
+    let asist= request.body.asist;
+    let elo= request.body.elo;
+    let tier= request.body.tier;
+    let matches= request.body.matches;
+    let wins= request.body.wins;
+    let loses= request.body.loses;
+
+        // const sql = `INSERT INTO usuario(email, nickname, password, G_manager,idioma, lfm, 
+        //     fecha_nacimiento, info_ad,imagen,id_jugador_riot,puuid, id_encrypt,id_champion,id_juego_fav,
+        //     nick,servidor,posicion,asist,elo,tier, Victorias, Derrotas) 
+        //     INNER JOIN data_userJg on(usuario.id_user = data_userJg.data_userJg_id)
+        //     VALUES(\"${email}\", \"${nombre}\", \"${password}\",\"${G_manager}\", \"${idioma}\", \"${lfm}\",
+        //     \"${fecha_nacimiento}\", \"${info_ad}\",\"${imagen}\",\"${id_jugador_riot}\", \"${puuid}\", \"${id_ecrypt}\",
+        //     \"${id_champion}\",\"${id_juego_fav}\",
+        //     \"${nick}\",\"${servidor}\",\"${posicion}\",\"${asist}\", \"${elo}\", \"${tier}\",\"${wins}\", \"${loses}\")`
+    const sql = `INSERT INTO usuario(email, nickname, password, G_manager,idioma, lfm, 
+                    fecha_nacimiento, info_ad,imagen,id_juego_fav) VALUES(\"${email}\", \"${nombre}\", \"${password}\",\"${G_manager}\", \"${idioma}\", \"${lfm}\",
+                    \"${fecha_nacimiento}\", \"${info_ad}\",\"${imagen}\",\"${id_juego_fav}\")`
 
 
-            }
-            res.status(200).send(response);
-        } else {
+   
 
-            let crear = `INSERT INTO usuario(email, nickname, password, G_manager, Lfm, fecha_nacimiento, info_ad,imagen,n_jugador,twitter,discord ) 
-                VALUES(\"${request.body.email}\", \"${request.body.nickname}\", \"${request.body.password}\", \"${request.body.fecha_nacimiento}\",\"${request.body.G_manger}\", \"${request.body.lfm}\",\"${request.body.info_ad}\",\"${request.body.imagen}\",\"${request.body.discord}\",\"${request.body.twitter}\",\"${request.body.n_jugador}\")`
-
-            connection.query(crear, function (err, res) {
-
+            connection.query(sql, function (err, res) {
                 if (err) {
                     console.log(err)
                 }
                 else {
-                    console.log("persona creada")
+                    console.log("creado")
                     console.log(res)
-                    respuesta = { error: false, codigo: 200, mensaje: "Usuario creado", resultado: res }
-
+                    respuesta = { error: false, codigo: 200, mensaje: "Usuario registrado", resultado: res }
+                    response.send(respuesta)
                 }
             })
-
-
-            response = {
-                error: false,
-                msg: "El usuario o la contraseña no son correctos",
-                resultado: results
-            }
-            res.status(404).send(response);
-        }
-    });
 });
+
 
 
 
