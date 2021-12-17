@@ -299,7 +299,7 @@ app.get("/torneo", function (request, response) {
 
     if (id == null) {
 
-        let sql = `SELECT * FROM torneo`
+        let sql = `SELECT * FROM torneo ORDER BY patrocinado DESK`
         let respuesta;
 
         connection.query(sql, function (err, res) {
@@ -319,7 +319,7 @@ app.get("/torneo", function (request, response) {
     else {
 
         let sql = `SELECT torneo_id, patrocinado, reglas, tier, juego_id, clave_torneo, nombre_torneo,
-                fecha_inicio, fecha_fin, numero_equipos FROM torneo WHERE torneo_id = ${id} ORDER BY patrocinado DESK`
+                fecha_inicio, fecha_fin, numero_equipos FROM torneo WHERE torneo_id = ${id}`
 
         connection.query(sql, function (err, res) {
 
