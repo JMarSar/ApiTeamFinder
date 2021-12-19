@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors")
+const axios = require('axios')
 let port = process.env.PORT || 3140;
 
 app.use(express.urlencoded({ extended: false }))
@@ -89,11 +90,10 @@ app.post('/login', (req, res) => {
     });
 });
 
-
-
 // ********* REGISTRO ***********
 
 app.post('/registro', (request, response) => {
+    console.log("llega registro")
     console.log(request.body)
     
     let email= request.body.email;
@@ -105,48 +105,60 @@ app.post('/registro', (request, response) => {
     let fecha_nacimiento= request.body.fecha_nacimiento;
     let info_ad= request.body.info_ad;
     let imagen= request.body.imagen;
-    let nick= request.body.nick;
-    let servidor= request.body.servidor;
-    let posicion= request.body.posicion;
-    let id_jugador_riot= request.body.id_jugador_riot;
-    let puuid= request.body.puuid;
-    let id_ecrypt= request.body.id_ecrypt;
-    let id_juego_fav= request.body.id_juego_fav;
-    let id_champion= request.body.id_champion;
-    let asist= request.body.asist;
-    let elo= request.body.elo;
-    let tier= request.body.tier;
-    let matches= request.body.matches;
-    let wins= request.body.wins;
-    let loses= request.body.loses;
+    let id_juego_fav = request.body.id_juego_fav
 
-        // const sql = `INSERT INTO usuario(email, nickname, password, G_manager,idioma, lfm, 
-        //     fecha_nacimiento, info_ad,imagen,id_jugador_riot,puuid, id_encrypt,id_champion,id_juego_fav,
-        //     nick,servidor,posicion,asist,elo,tier, Victorias, Derrotas) 
-        //     INNER JOIN data_userJg on(usuario.id_user = data_userJg.data_userJg_id)
-        //     VALUES(\"${email}\", \"${nombre}\", \"${password}\",\"${G_manager}\", \"${idioma}\", \"${lfm}\",
-        //     \"${fecha_nacimiento}\", \"${info_ad}\",\"${imagen}\",\"${id_jugador_riot}\", \"${puuid}\", \"${id_ecrypt}\",
-        //     \"${id_champion}\",\"${id_juego_fav}\",
-        //     \"${nick}\",\"${servidor}\",\"${posicion}\",\"${asist}\", \"${elo}\", \"${tier}\",\"${wins}\", \"${loses}\")`
     const sql = `INSERT INTO usuario(email, nickname, password, G_manager,idioma, lfm, 
                     fecha_nacimiento, info_ad,imagen,id_juego_fav) VALUES(\"${email}\", \"${nombre}\", \"${password}\",\"${G_manager}\", \"${idioma}\", \"${lfm}\",
                     \"${fecha_nacimiento}\", \"${info_ad}\",\"${imagen}\",\"${id_juego_fav}\")`
 
-
-   
 
             connection.query(sql, function (err, res) {
                 if (err) {
                     console.log(err)
                 }
                 else {
-                    console.log("creado")
+                    console.log("creado usuario")
                     console.log(res)
                     respuesta = { error: false, codigo: 200, mensaje: "Usuario registrado", resultado: res }
                     response.send(respuesta)
                 }
             })
 });
+
+
+
+app.post('/registrojuego', (request, response) => {
+    console.log(request.body)
+
+    let idbase = request.body.idbase
+    let nick= request.body.nick;
+    let servidor= request.body.servidor;
+    let posicion= request.body.posicion;
+    let id 
+    let accountid
+    let puuid
+    let tier
+    let rank
+    let wr
+    let champion_id
+    let kda
+    let elo
+    const sql2 = `INSERT INTO usuario(email, nickname, password, G_manager,idioma, lfm, 
+        fecha_nacimiento, info_ad,imagen,id_juego_fav) VALUES(\"${email}\", \"${nombre}\", \"${password}\",\"${G_manager}\", \"${idioma}\", \"${lfm}\",
+        \"${fecha_nacimiento}\", \"${info_ad}\",\"${imagen}\",\"${id_juego_fav}\")`
+
+            connection.query(sql2,params2, function (err, res) {
+                if (err) {
+                    console.log(err)
+                }
+                else {
+                    console.log("creado usuario")
+                    console.log(res)
+                    respuesta = { error: false, codigo: 200, mensaje: "Usuario registrado", resultado: res }
+                    response.send(respuesta)
+                }
+            })
+})
 
 
 
@@ -702,6 +714,220 @@ app.put("/alertas", function (request, response) {
         }
         response.send(respuesta)
     })
+})
+
+//****************COMPROBAR SI HAY ADMIN CREADO***************
+
+app.get("/admin", function (request, response) {
+
+    console.log("llega manager api")
+
+
+    let sql = `SELECT G_manager FROM usuario  WHERE G_manager = 1  `
+    let respuesta;
+
+    connection.query(sql, function (err, res) {
+
+        if (err) {
+
+            console.log(err)
+            respuesta = { error: true, codigo: 200, resultado: res }
+        }
+        else {
+            respuesta = { error: false, codigo: 200, resultado: res }
+
+        }
+        response.send(respuesta)
+    })
+})
+//****************ID***********
+
+app.post("/id", function (request, response) {
+
+    let nombre = request.body.nombre
+
+    console.log("llega id api")
+
+
+    let sql = `SELECT id_user FROM usuario  WHERE nickname = '${nombre}'  `
+    let respuesta;
+
+    connection.query(sql, function (err, res) {
+
+        if (err) {
+
+            console.log(err)
+            respuesta = { error: true, codigo: 200, resultado: res }
+        }
+        else {
+            respuesta = { error: false, codigo: 200, resultado: res, mensaje: "este es el usuario" }
+
+        }
+        response.send(respuesta)
+    })
+})
+
+
+//****************AÑADIR DATOS JUEGO***************
+// ********* APIS ***********
+
+let id 
+let accountid
+let puuid
+let tier
+let rank
+let wins
+let losses
+let wr
+let champion_id
+let matches =[]
+
+let kills1
+let deaths1
+let assists1
+let kda1
+
+let kills2
+let deaths2
+let assists2
+let kda2
+
+let kills3
+let deaths3
+let assists3
+let kda3
+
+let kda
+
+let elo
+
+app.post("/juego",function(req,response){
+
+        console.log(req.body)
+        let nombre = req.body.name
+        let id_base = req.body.id_base
+        let servidor= req.body.servidor;
+        let posicion= req.body.posicion;
+        let clave = `?api_key=RGAPI-e96278aa-30db-47e9-a585-b14e6db71113`
+
+        let url =`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/` +`${nombre}`+ `${clave}`
+        let url2 =`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/`
+        let url3 = `https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/`
+        let url4 = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/`
+        let urlmatch = `https://europe.api.riotgames.com/lol/match/v5/matches/`
+        let urlmatch1
+        let urlmatch2
+        let urlmatch3
+        let urlelo = `https://euw.whatismymmr.com/api/v1/summoner?name=`
+        id="ZPOmZLWxE3oVXnL-Bf5WYQ3Kr13nxYuJm34J52nvI0Cb2jE"
+
+
+        axios.get((url))       
+        .then((data) =>{
+                console.log(data.data)
+                id = data.data.id
+                accountid = data.data.accountId
+                puuid = data.data.puuid
+                // Actualizo la url para la siguiente peticion
+                url2=url2+id+clave
+                // Llamo a la siguiente llamada asincrona
+                return axios.get((url2))
+        })
+        .then((data) =>{
+                console.log("segunda query")
+
+                tier = data.data[0].tier
+                rank = data.data[0].rank
+                wins = data.data[0].wins
+                losses = data.data[0].losses
+                wr = wins/(wins+losses)*100 +"%"
+                url3 = url3 + id + clave
+                return axios.get((url3))
+        })
+        .then((data) =>{
+                console.log("tercera query")
+                champion_id = data.data[0].championId
+                url4 = url4 + puuid + `/ids?start=0&count=3&api_key=RGAPI-e96278aa-30db-47e9-a585-b14e6db71113`
+                return axios.get(url4)
+        })
+        .then((data) =>{
+                console.log("cuarta query")
+                console.log(data.data)
+                matches = data.data
+                urlmatch1 = urlmatch + matches[0] + clave
+                return axios.get(urlmatch1)
+        })
+        .then((data)=>{
+                console.log("quinta query")
+                kills1 = data.data.info.participants[0].assists
+                deaths1 = data.data.info.participants[0].deaths
+                assists1 = data.data.info.participants[0].kills
+
+                kda1 = (kills1 + assists1)/deaths1
+
+                urlmatch2 = urlmatch +matches[1] + clave
+                return axios.get(urlmatch2)
+        })
+        .then((data)=>{
+                console.log("sexta query")
+                kills2 = data.data.info.participants[1].assists
+                deaths2 = data.data.info.participants[1].deaths
+                assists2 = data.data.info.participants[1].kills
+
+                kda2 = (kills2 + assists2)/deaths2
+
+                urlmatch3 = urlmatch +matches[2] + clave
+                return axios.get(urlmatch3)
+        })
+        .then((data)=>{
+                console.log("septima query")
+                kills3 = data.data.info.participants[2].assists
+                deaths3 = data.data.info.participants[2].deaths
+                assists3 = data.data.info.participants[2].kills
+
+                kda3 = (kills3 + assists3)/deaths3
+                kda = (kda1 + kda2 + kda3)/3
+                console.log(kda)
+
+                urlelo = urlelo + nombre
+                return axios.get(urlelo)
+        })
+        .then((data)=>{
+                console.log("octava query")
+                console.log(urlelo)
+                console.log(data.data.normal.avg)
+                elo = data.data.normal.avg
+            let datos = {
+                id,accountid,
+            }
+                return datos
+        })
+        .then((data)=>{
+            console.log(data)
+            console.log("y lanzamos insert")
+
+            const sql2 = `INSERT INTO data_userJg( nick, posicion, rk_global,kda, wr, servidor, victorias, derrotas, 
+                            elo, tier, id_dentro_juego,puuid, encrypted_id,champion_id) 
+                    VALUES(\"${nombre}\", \"${posicion}\", \"${rank}\",\"${kda}\", \"${wr}\", \"${servidor}\",
+                     \"${wins}\",\"${losses}\",\"${elo}\" ,\"${tier}\",\"${id}\",\"${puuid}\",\"${accountid}\",\"${champion_id}\")`
+        
+                    connection.query(sql2, function (err, res) {
+                        if (err) {
+                            console.log(err)
+                            
+                        }
+                        else {
+                            console.log("creado usuario en el juego")
+                            console.log(res)
+                            respuesta = { error: false, codigo: 200, mensaje: "Usuario de juego registrado", resultado: res }
+                            response.send(respuesta)
+                        }
+                    })
+        })
+            
+        .catch((e) =>{
+                console.log(e)
+        })
 })
 
 
