@@ -808,7 +808,7 @@ app.post("/juego",function(req,response){
         let id_base = req.body.id_base
         let servidor= req.body.servidor;
         let posicion= req.body.posicion;
-        let clave = `?api_key=RGAPI-e96278aa-30db-47e9-a585-b14e6db71113`
+        let clave = `?api_key=RGAPI-77502b1e-b8d0-40e1-bd16-b0a19476a674`
 
         let url =`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/` +`${nombre}`+ `${clave}`
         let url2 =`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/`
@@ -819,7 +819,7 @@ app.post("/juego",function(req,response){
         let urlmatch2
         let urlmatch3
         let urlelo = `https://euw.whatismymmr.com/api/v1/summoner?name=`
-        id="ZPOmZLWxE3oVXnL-Bf5WYQ3Kr13nxYuJm34J52nvI0Cb2jE"
+
 
 
         axios.get((url))       
@@ -847,7 +847,7 @@ app.post("/juego",function(req,response){
         .then((data) =>{
                 console.log("tercera query")
                 champion_id = data.data[0].championId
-                url4 = url4 + puuid + `/ids?start=0&count=3&api_key=RGAPI-e96278aa-30db-47e9-a585-b14e6db71113`
+                url4 = url4 + puuid + `/ids?start=0&count=3&api_key=RGAPI-77502b1e-b8d0-40e1-bd16-b0a19476a674`
                 return axios.get(url4)
         })
         .then((data) =>{
