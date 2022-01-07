@@ -931,9 +931,7 @@ app.post("/juego",function(req,response){
 })
 //****************ID***********
 
-app.post("/apuntados", function (request, response) {
-
-    let id = request.body.id
+app.get("/apuntados", function (request, response) {
 
     console.log("llega id api")
 
