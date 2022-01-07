@@ -929,6 +929,31 @@ app.post("/juego",function(req,response){
                 console.log(e)
         })
 })
+//****************ID***********
 
+app.post("/apuntados", function (request, response) {
+
+    let id = request.body.id
+
+    console.log("llega id api")
+
+
+    let sql = `SELECT torneo_id FROM torneo  ORDER BY RAND() LIMIT 1`
+    let respuesta;
+
+    connection.query(sql, function (err, res) {
+
+        if (err) {
+
+            console.log(err)
+            respuesta = { error: true, codigo: 200, resultado: res }
+        }
+        else {
+            respuesta = { error: false, codigo: 200, resultado: res, mensaje: "estos sonlos id" }
+
+        }
+        response.send(respuesta)
+    })
+})
 
     app.listen(port)
