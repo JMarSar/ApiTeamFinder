@@ -936,7 +936,7 @@ app.get("/apuntados", function (request, response) {
     console.log("llega id api")
 
 
-    let sql = `SELECT torneo_id FROM torneo  ORDER BY RAND() LIMIT 1`
+    let sql = `SELECT * FROM torneo  ORDER BY RAND() LIMIT 3`
     let respuesta;
 
     connection.query(sql, function (err, res) {
